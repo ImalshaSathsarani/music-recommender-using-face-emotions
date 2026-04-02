@@ -85,4 +85,4 @@ history=model.fit(train_generator,
                   validation_data=validation_generator,
                   validation_steps=num_test_imgs//32)
 
-model.save('model_files.h5')
+model.save('model_files.keras')
