@@ -1,10 +1,15 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
+from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, RTCConfiguration
 import cv2
 import numpy as np
 from keras.models import load_model
 import pywhatkit as kit
 import os
+
+
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+)
 
 # --- 1. SETTINGS & CSS FOR VISUAL APPEAL ---
 st.set_page_config(page_title="Mood-Sync AI", page_icon="🎵", layout="centered")
@@ -95,6 +100,7 @@ class EmotionTransformer(VideoTransformerBase):
 # Camera Feed
 webrtc_streamer(
     key="emotion-detection",
+    rtc_configuration=RTC_CONFIGURATION,
     video_transformer_factory=EmotionTransformer,
     media_stream_constraints={"video": True, "audio": False},
 )
