@@ -3,7 +3,6 @@ from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, RTCConfigura
 import cv2
 import numpy as np
 from keras.models import load_model
-import pywhatkit as kit
 import os
 
 
