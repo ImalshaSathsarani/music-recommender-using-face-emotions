@@ -1,9 +1,10 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, RTCConfiguration
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 import cv2
 import numpy as np
 from keras.models import load_model
 import os
+import av
 
 
 RTC_CONFIGURATION = RTCConfiguration(
@@ -80,8 +81,8 @@ def get_local_songs(emotion):
 st.title("🎵 Mood-Sync AI")
 st.write("Detect your mood and choose your music source below.")
 
-class EmotionTransformer(VideoTransformerBase):
-    def transform(self, frame):
+class EmotionProcessor(VideoProcessorBase):
+    def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
@@ -99,13 +100,13 @@ class EmotionTransformer(VideoTransformerBase):
             cv2.rectangle(img, (x, y), (x + w, y + h), (255, 75, 75), 2)
             cv2.putText(img, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
 
-        return img
+        return av.VideoFrame.from_ndarray(img, format="bgr24")
 
 # Camera Feed
 webrtc_streamer(
     key="emotion-detection",
     rtc_configuration=RTC_CONFIGURATION,
-    video_transformer_factory=EmotionTransformer,
+    video_processor_factory=EmotionProcessor,
     media_stream_constraints={"video": True, "audio": False},
     async_processing=True,
 )
