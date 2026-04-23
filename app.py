@@ -7,7 +7,12 @@ import os
 
 
 RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+    {"iceServers": [
+        {"urls": ["stun:stun.l.google.com:19302"]},
+        {"urls": ["stun:stun1.l.google.com:19302"]},
+        {"urls": ["stun:stun2.l.google.com:19302"]}
+        
+        ]}
 )
 
 # --- 1. SETTINGS & CSS FOR VISUAL APPEAL ---
@@ -102,6 +107,7 @@ webrtc_streamer(
     rtc_configuration=RTC_CONFIGURATION,
     video_transformer_factory=EmotionTransformer,
     media_stream_constraints={"video": True, "audio": False},
+    async_processing=True,
 )
 
 st.markdown("### 🎧 Where should we play from?")
