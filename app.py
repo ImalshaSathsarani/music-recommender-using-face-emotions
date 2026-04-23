@@ -5,6 +5,8 @@ import numpy as np
 from keras.models import load_model
 import os
 import av
+from huggingface_hub import hf_hub_download
+
 
 
 RTC_CONFIGURATION = RTCConfiguration(
@@ -56,7 +58,12 @@ bridge = st.session_state['emotion_bridge']
 @st.cache_resource
 def load_my_model():
     try:
-        return load_model('model_files.keras')
+       model_path = hf_hub_download(
+           repo_id="Imalsha123/emotion-model",
+           filename="model_files.keras"
+
+       )
+       return load_model(model_path)
     except Exception as e:
         st.error(f"Error loading model: {e}")
         return None
