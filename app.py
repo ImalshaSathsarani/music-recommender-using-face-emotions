@@ -114,7 +114,11 @@ with col1:
     if st.button("🚀 Search on YouTube"):
         detected_mood = bridge.current_emotion
         st.success(f"Mood: {detected_mood} | Redirecting to YouTube...")
-        kit.playonyt(f"{detected_mood} mood songs")
+
+        search_query = f"{detected_mood}+mood+songs"
+        yt_url = f"https://www.youtube.com/results?search_query={search_query}"
+        st.link_button("Open YouTube", yt_url)
+       # kit.playonyt(f"{detected_mood} mood songs")
 
 with col2:
     if st.button("🏠 Play from My Platform"):
