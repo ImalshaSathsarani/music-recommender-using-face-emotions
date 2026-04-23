@@ -6,19 +6,30 @@ from keras.models import load_model
 import os
 import av
 from huggingface_hub import hf_hub_download
+from twilio.rest import Client
+import os
 
 
+account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+auth_token = os.getenv("TWILIO_AUTH_TOKEN")
 
-RTC_CONFIGURATION = RTCConfiguration(
-    {"iceServers": [
-        {"urls": ["stun:stun.l.google.com:19302"]},
-        {"urls": ["stun:stun1.l.google.com:19302"]},
-        {"urls": ["stun:stun2.l.google.com:19302"]},
-        {"urls": ["stun:stun3.l.google.com:19302"]},
-        {"urls": ["stun:stun4.l.google.com:19302"]}
+client = Client(account_sid, auth_token)
+token = client.tokens.create()
+
+RTC_CONFIGURATION = {
+    "iceServers": token.ice_servers
+}
+
+# RTC_CONFIGURATION = RTCConfiguration(
+#     {"iceServers": [
+#         {"urls": ["stun:stun.l.google.com:19302"]},
+#         {"urls": ["stun:stun1.l.google.com:19302"]},
+#         {"urls": ["stun:stun2.l.google.com:19302"]},
+#         {"urls": ["stun:stun3.l.google.com:19302"]},
+#         {"urls": ["stun:stun4.l.google.com:19302"]}
         
-        ]}
-)
+#         ]}
+# )
 
 # --- 1. SETTINGS & CSS FOR VISUAL APPEAL ---
 st.set_page_config(page_title="Mood-Sync AI", page_icon="🎵", layout="centered")
